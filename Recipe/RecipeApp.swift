@@ -13,7 +13,7 @@ struct RecipeApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            CategoryView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
