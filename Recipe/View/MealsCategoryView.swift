@@ -17,7 +17,7 @@ struct MealsCategoryView: View {
         List {
             ForEach(vm.meal, id: \.self) { meal in
                 NavigationLink {
-                    RecipeView(meal: meal)
+                    RecipeView(vm: .init(meal: meal))
                 } label: {
                     MealCategoryItem(meal: meal)
                 }

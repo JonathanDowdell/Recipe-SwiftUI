@@ -6,18 +6,17 @@
 //
 
 import SwiftUI
+import CoreData
 import NukeUI
 
 struct RecipeView: View {
     
-    let meal: Meal
-    
-    @StateObject var vm: ViewModel = .init()
+    @StateObject var vm: ViewModel
     
     var body: some View {
         List {
             Section {
-                LazyImage(source: meal.strMealThumb, resizingMode: .aspectFit)
+                LazyImage(source: vm.meal.strMealThumb, resizingMode: .aspectFit)
                     .frame(height: 200, alignment: .center)
                     .cornerRadius(10)
             }
@@ -46,9 +45,21 @@ struct RecipeView: View {
 
 
         }
-        .navigationTitle(meal.strMeal)
+        .navigationTitle(vm.meal.strMeal)
+        .toolbar {
+            ToolbarItem(placement: ToolbarItemPlacement.navigationBarTrailing) {
+                Button {
+                    vm.shouldSave.toggle()
+                } label: {
+                    Image(systemName: vm.shouldSave ? "star.fill" : "star")
+                }
+            }
+        }
         .task {
-            await vm.getIngredients(mealId: meal.idMeal)
+            await vm.getIngredients(mealId: vm.meal.idMeal)
+        }
+        .onDisappear {
+            vm.handleSaveOrUnsave()
         }
     }
 }
@@ -56,7 +67,7 @@ struct RecipeView: View {
 struct RecipeView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            RecipeView(meal: .MOCK)
+            RecipeView(vm: .init(meal: .MOCK))
         }
     }
 }
@@ -66,12 +77,35 @@ extension RecipeView {
         
         @Published var recipe: Recipe?
         
+        @Published var recipeEntity: RecipeEntity?
+        
+        @Published var shouldSave: Bool = false
+        
+        let meal: Meal
+        
         private let network: NetworkProtocol
         
+        private let context: NSManagedObjectContext
+        
+        deinit {
+            print("Deinited - RecipeView")
+        }
+        
         init(
-            network: NetworkProtocol = DefaultNetworkService.shared
+            meal: Meal,
+            recipe: Recipe? = nil,
+            entity: RecipeEntity? = nil,
+            network: NetworkProtocol = DefaultNetworkService.shared,
+            context: NSManagedObjectContext = PersistenceController.shared.container.viewContext
         ) {
+            self.meal = meal
+            self.recipeEntity = entity
             self.network = network
+            self.context = context
+            if let recipe = recipe {
+                self.recipe = recipe
+                self.shouldSave = true
+            }
         }
         
         @MainActor
@@ -86,6 +120,17 @@ extension RecipeView {
                 }
             } catch {
                 print(error)
+            }
+        }
+        
+        func handleSaveOrUnsave() {
+            if shouldSave, let recipe = recipe, recipeEntity == nil {
+                _ = recipe.toEntity()
+            } else if let recipeEntity = recipeEntity {
+                context.delete(recipeEntity)
+            }
+            withAnimation {
+                try? context.save()
             }
         }
     }

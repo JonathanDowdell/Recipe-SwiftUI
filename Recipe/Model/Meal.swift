@@ -17,6 +17,7 @@ struct Meal: Codable {
     var strMeal: String
     var strMealThumb: String
     var idMeal: String
+    var ingredients: [Ingredient]? = nil
 }
 
 extension Meal: Hashable {}

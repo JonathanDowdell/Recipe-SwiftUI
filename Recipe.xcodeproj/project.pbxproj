@@ -26,6 +26,10 @@
 		244314412882760A00792A4A /* Ingredient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244314402882760A00792A4A /* Ingredient.swift */; };
 		244314432882763100792A4A /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244314422882763100792A4A /* RecipeView.swift */; };
 		246EECB92883032E00FA84C5 /* DelayedTextObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246EECB82883032E00FA84C5 /* DelayedTextObject.swift */; };
+		246EECD72883297A00FA84C5 /* RecipeEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246EECD32883297A00FA84C5 /* RecipeEntity+CoreDataClass.swift */; };
+		246EECD82883297A00FA84C5 /* RecipeEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246EECD42883297A00FA84C5 /* RecipeEntity+CoreDataProperties.swift */; };
+		246EECD92883297A00FA84C5 /* IngredientEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246EECD52883297A00FA84C5 /* IngredientEntity+CoreDataClass.swift */; };
+		246EECDA2883297A00FA84C5 /* IngredientEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246EECD62883297A00FA84C5 /* IngredientEntity+CoreDataProperties.swift */; };
 		24A57D91288203D60057B14F /* RecipeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A57D90288203D60057B14F /* RecipeApp.swift */; };
 		24A57D95288203D70057B14F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24A57D94288203D70057B14F /* Assets.xcassets */; };
 		24A57D98288203D70057B14F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24A57D97288203D70057B14F /* Preview Assets.xcassets */; };
@@ -73,6 +77,10 @@
 		244314402882760A00792A4A /* Ingredient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ingredient.swift; sourceTree = "<group>"; };
 		244314422882763100792A4A /* RecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeView.swift; sourceTree = "<group>"; };
 		246EECB82883032E00FA84C5 /* DelayedTextObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelayedTextObject.swift; sourceTree = "<group>"; };
+		246EECD32883297A00FA84C5 /* RecipeEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecipeEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		246EECD42883297A00FA84C5 /* RecipeEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecipeEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		246EECD52883297A00FA84C5 /* IngredientEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IngredientEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		246EECD62883297A00FA84C5 /* IngredientEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IngredientEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		24A57D8D288203D60057B14F /* Recipe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Recipe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		24A57D90288203D60057B14F /* RecipeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeApp.swift; sourceTree = "<group>"; };
 		24A57D94288203D70057B14F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -160,6 +168,17 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
+		246EECBA288324EC00FA84C5 /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				246EECD32883297A00FA84C5 /* RecipeEntity+CoreDataClass.swift */,
+				246EECD42883297A00FA84C5 /* RecipeEntity+CoreDataProperties.swift */,
+				246EECD52883297A00FA84C5 /* IngredientEntity+CoreDataClass.swift */,
+				246EECD62883297A00FA84C5 /* IngredientEntity+CoreDataProperties.swift */,
+			);
+			path = Entity;
+			sourceTree = "<group>";
+		};
 		24A57D84288203D60057B14F = {
 			isa = PBXGroup;
 			children = (
@@ -186,6 +205,7 @@
 				246EECB72883032700FA84C5 /* Utils */,
 				2443142528820E9B00792A4A /* Network */,
 				2443142228820CA400792A4A /* Model */,
+				246EECBA288324EC00FA84C5 /* Entity */,
 				2443142128820C9900792A4A /* View */,
 				24A57D90288203D60057B14F /* RecipeApp.swift */,
 				24A57D94288203D70057B14F /* Assets.xcassets */,
@@ -357,6 +377,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				246EECD82883297A00FA84C5 /* RecipeEntity+CoreDataProperties.swift in Sources */,
 				24A57D9A288203D70057B14F /* Persistence.swift in Sources */,
 				24A57D91288203D60057B14F /* RecipeApp.swift in Sources */,
 				2443142D28820EE100792A4A /* MealsRequest.swift in Sources */,
@@ -365,17 +386,20 @@
 				2443142728820EA500792A4A /* HTTPMethod.swift in Sources */,
 				24431439288216A900792A4A /* Meal.swift in Sources */,
 				24A57DC22882040F0057B14F /* CategoryView.swift in Sources */,
+				246EECDA2883297A00FA84C5 /* IngredientEntity+CoreDataProperties.swift in Sources */,
 				2443142028820BF100792A4A /* CategoryItem.swift in Sources */,
 				24A57D9D288203D70057B14F /* Recipe.xcdatamodeld in Sources */,
 				2443142428820CBD00792A4A /* Category.swift in Sources */,
 				2443142928820EB900792A4A /* DataRequest.swift in Sources */,
 				2443142B28820ECD00792A4A /* CategoryRequest.swift in Sources */,
 				2443143528820F7600792A4A /* NetworkProtocol.swift in Sources */,
+				246EECD72883297A00FA84C5 /* RecipeEntity+CoreDataClass.swift in Sources */,
 				244314412882760A00792A4A /* Ingredient.swift in Sources */,
 				2443142F28820F1500792A4A /* MealSearchRequest.swift in Sources */,
 				2443143128820F4500792A4A /* RecipeRequest.swift in Sources */,
 				2443143B2882184800792A4A /* MealsCategoryView.swift in Sources */,
 				2443143328820F5F00792A4A /* ErrorResponse.swift in Sources */,
+				246EECD92883297A00FA84C5 /* IngredientEntity+CoreDataClass.swift in Sources */,
 				2443143F288275F300792A4A /* Recipe.swift in Sources */,
 				2443143728820F8600792A4A /* DefaultNetworkService.swift in Sources */,
 				2443143D28826D2F00792A4A /* MealCategoryItem.swift in Sources */,

@@ -6,17 +6,16 @@
 //
 
 import SwiftUI
-import NukeUI
+import CoreData
 
 struct CategoryView: View {
     
     @StateObject private var vm = ViewModel()
     
+    @FetchRequest(entity: RecipeEntity.entity(), sortDescriptors: [])
+    var favoriteRecipes: FetchedResults<RecipeEntity>
+    
     @StateObject var delayedTextSearch = DelayedTextObject()
-    
-    @Environment(\.isSearching) var isSearching
-    
-    @Environment(\.dismissSearch) var dismissSearch
     
     var body: some View {
         NavigationView {
@@ -26,7 +25,7 @@ struct CategoryView: View {
                     Section {
                         ForEach(vm.meals, id: \.self) { meal in
                             NavigationLink {
-                                RecipeView(meal: meal)
+                                RecipeView(vm: .init(meal: meal))
                             } label: {
                                 MealCategoryItem(meal: meal)
                             }
@@ -37,6 +36,32 @@ struct CategoryView: View {
                 }
                 
                 // Favorites
+                if favoriteRecipes.count > 0 {
+                    Section {
+                        ForEach(favoriteRecipes, id: \.self) { mealEntity in
+                            let meal = mealEntity.toMeal()
+                            NavigationLink {
+                                RecipeView(vm:
+                                        .init(
+                                            meal: meal,
+                                            recipe: mealEntity.toRecipe(),
+                                            entity: mealEntity
+                                        )
+                                )
+                            } label: {
+                                MealCategoryItem(meal: meal)
+                            }
+                        }
+                        .onDelete { indexSet in
+                            for index in indexSet {
+                                vm.deleteSavedRecipe(favoriteRecipes[index])
+                            }
+                        }
+                    } header: {
+                        Text("Favorite")
+                    }
+
+                }
                 
                 // Categories
                 Section {
@@ -81,6 +106,8 @@ extension CategoryView {
         
         @Published var searchText = ""
         
+        @Published var meals: [Meal] = .init()
+        
         @Published var _categories: [Category] = .init()
  
         var categories: [Category] {
@@ -89,15 +116,17 @@ extension CategoryView {
             return _categories.filter { $0.strCategory.localizedCaseInsensitiveContains(searchText) }
         }
         
-        @Published var meals: [Meal] = .init()
-        
         
         private let network: NetworkProtocol
         
+        private let context: NSManagedObjectContext
+        
         init(
-            network: NetworkProtocol = DefaultNetworkService.shared
+            network: NetworkProtocol = DefaultNetworkService.shared,
+            content: NSManagedObjectContext = PersistenceController.shared.container.viewContext
         ) {
             self.network = network
+            self.context = content
         }
         
         @MainActor
@@ -126,6 +155,11 @@ extension CategoryView {
                     self.meals = mealsResponse
                 }
             }
+        }
+        
+        func deleteSavedRecipe(_ entity: RecipeEntity) {
+            context.delete(entity)
+            try? context.save()
         }
     }
 }
